@@ -2,7 +2,6 @@ package com.davec.bookstore;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import java.awt.print.Book;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -16,12 +15,12 @@ public class BookController {
     }
 
     @GetMapping("/books/")
-    public Iterable<Book> getBooks() {
+    public Iterable<com.davec.bookstore.Book> getBooks() {
         return bookRepository.findAll();
     }
 
     @GetMapping("/books/{id}")
-    public Book getBook(@PathVariable("id") Long id) {
+    public com.davec.bookstore.Book getBook(@PathVariable("id") Long id) {
         return bookRepository.findById(id).get();
     }
 
