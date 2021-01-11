@@ -1,5 +1,10 @@
 package com.davec.bookstore;
 
+import io.split.client.SplitClient;
+import io.split.client.SplitClientConfig;
+import io.split.client.SplitFactory;
+import io.split.client.SplitFactoryBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,5 +31,22 @@ public class BookstoreApplication {
 			//retrieve them all, and print so that we see everything is wired up correctly
 			repository.findAll().forEach(System.out::println);
 		};
+	}
+
+	@Value("${split.io.api.key}")
+	private String splitApiKey;
+
+	@Bean
+	public SplitClient splitClient() throws Exception {
+		SplitClientConfig config = SplitClientConfig.builder()
+				.setBlockUntilReadyTimeout(10000)
+				.enableDebug()
+				.build();
+
+		SplitFactory splitFactory = SplitFactoryBuilder.build(splitApiKey, config);
+		SplitClient client = splitFactory.client();
+		client.blockUntilReady();
+
+		return client;
 	}
 }
