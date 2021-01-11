@@ -9,6 +9,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Stream;
 
@@ -48,5 +49,28 @@ public class BookstoreApplication {
 		client.blockUntilReady();
 
 		return client;
+	}
+
+
+	@Component
+	public class SplitWrapper {
+		@Value("${split.io.api.key}")
+		private String splitApiKey;
+		private final SplitClient splitClient;
+
+		public SplitWrapper(SplitClient splitClient) {
+			this.splitClient = splitClient;
+		}
+
+		public boolean isTreatmentOn(String treatmentName) {
+			String treatment = splitClient.getTreatment(splitApiKey, treatmentName);
+			if (treatment.equals("on")) {
+				return true;
+			} else if (treatment.equals("off")) {
+				return false;
+			} else {
+				throw new RuntimeException("Error retrieving treatment from Split.io");
+			}
+		}
 	}
 }
