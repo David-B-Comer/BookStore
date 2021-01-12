@@ -32,9 +32,14 @@ export class AppComponent implements OnInit {
       });
   };
 
+  deleteBook(book) { this.bookService.deleteBook(book.id); this.router.navigate(['list-books']); }
+
+  deleteAllowed() { return this.splitIoService.isTreatmentOn('allow-delete'); }
+
   ngOnInit(): void {
     this.router.events.subscribe(value => {
       this.getBooks();
     });
+    this.splitioService.initSdk();
   }
 }
