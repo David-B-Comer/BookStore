@@ -11,6 +11,7 @@
   },
   "private": true,
   "dependencies": {
+    "@splitsoftware/splitio": "^10.11.1",
     "@angular/animations": "~9.1.13",
     "@angular/common": "~9.1.13",
     "@angular/compiler": "~9.1.13",
