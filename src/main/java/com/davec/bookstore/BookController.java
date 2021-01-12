@@ -2,16 +2,19 @@ package com.davec.bookstore;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import com.davec.bookstore.BookstoreApplication.SplitWrapper;
+
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class BookController {
 
+    SplitWrapper splitWrapper;
     BookRepository bookRepository;
 
-    public BookController(BookRepository bookRepository) {
-
+    public BookController(BookRepository bookRepository, SplitWrapper splitWrapper) {
         this.bookRepository = bookRepository;
+        this.splitWrapper = splitWrapper;
     }
 
     @GetMapping("/books/")
@@ -31,5 +34,15 @@ public class BookController {
         return HttpStatus.CREATED;
     }
 
+    @DeleteMapping("/books/{id}")
+    public HttpStatus deleteBook(@PathVariable("id") Long id) {
+        if (splitWrapper.isTreatmentOn("allow-delete")) {
+            bookRepository.deleteById(id);
+
+            return HttpStatus.OK;
+        } else {
+            return HttpStatus.NOT_FOUND;
+        }
+    }
 }
 
