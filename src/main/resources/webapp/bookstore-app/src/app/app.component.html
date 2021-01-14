@@ -22,4 +22,7 @@
     <button (click)="addBook()"> Add Book</button>
   </p>
 </div>
+<td>
+  <div *ngIf="deleteAllowed()"> <button  type="button" (click)="deleteBook(book)">Delete</button></div>
+</td>
 <router-outlet></router-outlet>
